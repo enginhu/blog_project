@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block body %}
+     <div class="row">
+
+    <div class="col-md-12 my-5">
+        <div class="d-flex justify-content-between">
+
+            <!-- Title -->
+            <h3 class="mt-1">{{ article.title }}</h3>
+            <div class="text-right">
+                <!-- Author -->
+                <p class="lead">
+                    Author: {{ article.author }}</a>
+                </p>
+                <!-- Date/Time -->
+                <p>Date: {{article.created_date}}</p>
+            </div>
+        </div>
+        <hr>
+
+        <!-- Preview Image -->
+        <div class="d-flex justify-content-center">
+        {% if article.article_image %}
+        <img class="img-fluid rounded" src="{{ article.article_image.url }}" alt="{{ article.title }}">
+        {% else %}
+        <p>No image</p>
+        {% endif %}
+        </div>
+        
+
+        <hr>
+
+        <!-- Post Content -->
+        {{ article.content|safe}}
+
+        <hr>
+         <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Leave a Comment:</h5>
+          <div class="card-body">
+            <form action="{% url 'article:add_comment' article.id  %}" method="POST">
+            {% csrf_token %}
+            
+              <div class="form-group">
+              <input name="comment_author" class="form-control mb-1" type="text" placeholder="Name">
+                <textarea name="comment_content" class="form-control" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+
+        <h4>Comments:</h4>
+                <hr>
+        {% if comments %}
+          {% for comment in comments %}
+            <!-- Single Comment -->
+            <div class="media mb-4">
+              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+              <div class="media-body">
+              <div class="d-flex justify-content-between">
+                <h5 class="mt-0">{{ comment.comment_author }}</h5><p>{{ comment.comment_date }}</p></div>
+                  {{ comment.comment_content }}</div>
+            </div>
+          
+          {% endfor %}
+        
+        {% else %}
+        <div class="alert alert-warning">No comments.</div>
+        {% endif %}
+</div>
+</div>
+
+    
+{% endblock body %} 

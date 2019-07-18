@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h3>Control Panel</h3>
+    <hr>
+    <div class="container d-flex justify-content-between px-2">
+    <a href="{% url 'article:add_article'  %}" class="btn btn-info">Add Article</a>
+    Welcome, {{request.user.username}}</div> <br>
+    
+      {% if articles %}
+    <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+      <th scope="col">Date</th>
+      <th scope="col">Update</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for article in articles  %}
+    <tr>
+      <th scope="row">{{ article.id }}</th>
+      <td>{{ article.title }}</td>
+      <td>{{ article.author }}</td>
+      <td>{{ article.created_date }}</td>
+      <td><a href="{% url 'article:update_article' article.id  %}" class="btn btn-warning">Update</a></td>
+      <td><a href="{% url 'article:delete_article' article.id  %}" class="btn btn-danger">Delete</a></td>
+    </tr>
+    {% endfor %}
+    
+  </tbody>
+</table>
+  {% else %}
+    <div class="alert alert-warning">No article found.</div>
+  {% endif %}
+{% endblock body %}

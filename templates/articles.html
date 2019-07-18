@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container d-flex justify-content-between mt-3">
+    <h1 class="text-center">Articles</h1>
+    <form class="form-inline md-form form-sm active-purple active-purple-2 mt-2">
+    {% csrf_token %}
+            <input class="form-control form-control-sm" type="text" name="keyword" placeholder="Search"
+            aria-label="Search">
+            <button type="submit" class="btn btn-sm btn-primary ml-3">Search</button>
+        </form>
+</div>
+<hr>
+
+{% if articles %}
+{% for article in articles  %}
+<div class="row">
+
+    <!-- Post Content Column -->
+    <div class="col-md-12 mb-5">
+        <div class="d-flex justify-content-between border-bottom m-2">
+
+            <!-- Title -->
+            <h3 class=""><a href="{% url 'article:article_detail' article.id  %}">{{ article.title }}</a></h3>
+            <div class="text-right">
+                <!-- Author -->
+                <p class="lead">
+                    Author: {{ article.author }}</a>
+                </p>
+                <!-- Date/Time -->
+                <p>Date: {{article.created_date}}</p>
+            </div>
+        </div>
+
+
+        <!-- Preview Image -->
+        <div class="d-flex justify-content-center">
+            {% if article.article_image %}
+            <a href="{% url 'article:article_detail' article.id  %}"><img class="img-fluid rounded" src="{{ article.article_image.url }}"
+                    alt="{{ article.title }}" title="{{ article.title }}"></a>
+            {% else %}
+            <p>No image</p>
+            {% endif %}
+        </div>
+
+
+        <!-- Post Content -->
+        <div class="pt-3">
+            {{ article.content|truncatewords:40|safe}}
+            <a href="article/{{ article.id }}" class="px-3">Read More</a>
+        </div>
+
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="alert alert-danger">No article found.</div>
+{% endif %}
+{% endblock body %}
